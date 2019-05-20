@@ -1,0 +1,9 @@
+<th:block xmlns:th="http://www.thymeleaf.org" th:fragment="fieldError">
+    <!--/*@thymesVar id="bindingResult" type="org.springframework.validation.BindingResult"*/-->
+    <!--/*@thymesVar id="fieldName" type="java.lang.String"*/-->
+    <th:block th:if="${bindingResult != null && bindingResult.hasFieldErrors(fieldName)}">
+        <th:block th:each="error: ${bindingResult.getFieldErrors(fieldName)}">
+            <div class="text-danger" th:text="${error.getDefaultMessage()}"></div>
+        </th:block>
+    </th:block>
+</th:block>
