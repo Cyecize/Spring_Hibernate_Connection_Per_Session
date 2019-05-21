@@ -16,28 +16,30 @@ public class SessionDbServiceImpl implements SessionDbService {
 
     }
 
+    /**
+     * Updated the Db Connection last accessed time so that it doesn't get closed due to inactivity.
+     */
+    @Override
+    public void sendKeepAlive() {
+        if (this.dbConnection != null) {
+            this.dbConnection.setLastUpdatedTime(new Date().getTime());
+        }
+    }
+
     @Override
     public void setConnection(UserDbConnection dbConnection) {
         this.dbConnection = dbConnection;
-        this.updateDbConnectionTime();
     }
 
     @Override
     public boolean hasOpenConnection() {
-        return this.getConnection() != null &&
-                this.getConnection().getOrmConnection() != null &&
-                this.getConnection().getOrmConnection().isOpen();
+        return this.dbConnection != null &&
+                this.dbConnection.getOrmConnection() != null &&
+                this.dbConnection.getOrmConnection().isOpen();
     }
 
     @Override
     public UserDbConnection getConnection() {
-        this.updateDbConnectionTime();
         return this.dbConnection;
-    }
-
-    private void updateDbConnectionTime() {
-        if (this.dbConnection != null) {
-            this.dbConnection.setLastUpdatedTime(new Date().getTime());
-        }
     }
 }

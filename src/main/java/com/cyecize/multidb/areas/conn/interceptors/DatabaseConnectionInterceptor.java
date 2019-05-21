@@ -25,21 +25,25 @@ public class DatabaseConnectionInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
-        if (handler instanceof HandlerMethod && !request.getRequestURI().equals(DbConnectionConstants.DB_CONNECT_ROUTE)) {
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
+        if (handler instanceof HandlerMethod) {
+            this.sessionDbService.sendKeepAlive();
 
-            if (!this.sessionDbService.hasOpenConnection()) {
-                response.sendRedirect(request.getContextPath() + DbConnectionConstants.DB_CONNECT_ROUTE);
-                return false;
-            }
+            if (!request.getRequestURI().equals(DbConnectionConstants.DB_CONNECT_ROUTE)) {
+                HandlerMethod handlerMethod = (HandlerMethod) handler;
 
-            final UserDbConnection dbConnection = this.sessionDbService.getConnection();
+                if (!this.sessionDbService.hasOpenConnection()) {
+                    response.sendRedirect(request.getContextPath() + DbConnectionConstants.DB_CONNECT_ROUTE);
+                    return false;
+                }
 
-            //Refresh the entity manager if required.
-            if (dbConnection.getOrmConnection() != null) {
-                if (handlerMethod.getMethod().isAnnotationPresent(DisableJpaCache.class) || handlerMethod.getBeanType().isAnnotationPresent(DisableJpaCache.class)) {
-                    dbConnection.getEntityManager().close();
-                    dbConnection.setEntityManager(dbConnection.getOrmConnection().createEntityManager());
+                final UserDbConnection dbConnection = this.sessionDbService.getConnection();
+
+                //Refresh the entity manager if required.
+                if (dbConnection.getOrmConnection() != null) {
+                    if (handlerMethod.getMethod().isAnnotationPresent(DisableJpaCache.class) || handlerMethod.getBeanType().isAnnotationPresent(DisableJpaCache.class)) {
+                        dbConnection.getEntityManager().close();
+                        dbConnection.setEntityManager(dbConnection.getOrmConnection().createEntityManager());
+                    }
                 }
             }
         }
