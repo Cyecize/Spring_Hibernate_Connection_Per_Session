@@ -9,10 +9,10 @@ import java.util.Date;
 
 @Service
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class SessionDbConnectionServiceImpl implements SessionDbConnectionService {
+public class SessionDbServiceImpl implements SessionDbService {
     private UserDbConnection dbConnection;
 
-    public SessionDbConnectionServiceImpl() {
+    public SessionDbServiceImpl() {
 
     }
 
@@ -24,7 +24,9 @@ public class SessionDbConnectionServiceImpl implements SessionDbConnectionServic
 
     @Override
     public boolean hasOpenConnection() {
-        return this.getConnection() != null && this.getConnection().getOrmConnection().isOpen();
+        return this.getConnection() != null &&
+                this.getConnection().getOrmConnection() != null &&
+                this.getConnection().getOrmConnection().isOpen();
     }
 
     @Override

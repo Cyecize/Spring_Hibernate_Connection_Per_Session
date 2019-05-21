@@ -66,7 +66,7 @@ public class ConnectionManagerForMsSQL extends ConnectionManagerBase {
         try (Connection connection = this.createJdbcConnection(credentials)) {
 
             //If there is no database, create one
-            if (this.getAllDatabaseNames(connection).stream().anyMatch(dbName -> dbName.toLowerCase().equals(credentials.getDatabaseName().toUpperCase()))) {
+            if (this.getAllDatabaseNames(connection).stream().noneMatch(dbName -> dbName.toLowerCase().equals(credentials.getDatabaseName().toLowerCase()))) {
                 connection.prepareStatement("CREATE DATABASE " + credentials.getDatabaseName()).execute();
             }
 

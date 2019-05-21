@@ -1,0 +1,68 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="layout/head.html :: head"> </th:block>
+<body>
+<div>
+    <!--/*@thymesVar id="model" type="com.cyecize.multidb.areas.conn.models.DbCredentials"*/-->
+    <!--/*@thymesVar id="bindingResult" type="org.springframework.validation.BindingResult"*/-->
+
+    <div class="container">
+        <div class="m-auto">
+            <h3>Establish Database Connection</h3>
+            <form method="post" id="formDbConnection">
+                <div class="form-group">
+                    <label for="dbProvider">Database Provider</label>
+                    <select name="databaseProvider" id="dbProvider" required class="form-control ">
+                        <option value="" disabled selected>-- Choose --</option>
+                        <!--/*@thymesVar id="providers" type="com.cyecize.multidb.areas.conn.enums.DatabaseProvider[]"*/-->
+                        <th:block th:each="provider: ${providers}">
+                            <option th:text="${provider.name()}" th:selected="${provider == model.databaseProvider}"></option>
+                        </th:block>
+                    </select>
+
+                    <th:block th:with="fieldName='databaseProvider'" th:include="validation/field-errors.html :: fieldError"> </th:block>
+                </div>
+
+                <div class="form-group">
+                    <label for="hostAddress">Host</label>
+                    <input th:value="${model.host}" type="text" id="hostAddress" name="host" class="form-control"
+                           required placeholder="db.server.com">
+                    <th:block th:with="fieldName='host'" th:include="validation/field-errors.html :: fieldError"> </th:block>
+                </div>
+
+                <div class="form-group">
+                    <label for="port">Port</label>
+                    <input th:value="${model.port}" type="number" id="port" step="1" name="port" placeholder="3306/1433"
+                           class="form-control " required>
+                    <th:block th:with="fieldName='port'" th:include="validation/field-errors.html :: fieldError"> </th:block>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input th:value="${model.username}" type="text" id="username" name="username" placeholder="root"
+                           class="form-control" required>
+                    <th:block th:with="fieldName='username'" th:include="validation/field-errors.html :: fieldError"> </th:block>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="******" class="form-control">
+                    <th:block th:with="fieldName='password'" th:include="validation/field-errors.html :: fieldError"> </th:block>
+                </div>
+
+                <div class="form-group">
+                    <label for="databaseName">Database Name</label>
+                    <input th:value="${model.databaseName}" type="text" id="databaseName" name="databaseName" class="form-control"
+                           required placeholder="Database name">
+                    <th:block th:with="fieldName='databaseName'" th:include="validation/field-errors.html :: fieldError"> </th:block>
+                </div>
+
+                <div class="form-group text-right">
+                    <th:block th:include="validation/csrf.html :: csrf"> </th:block>
+                    <button class="btn btn-info" id="btnConnect">Connect</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
