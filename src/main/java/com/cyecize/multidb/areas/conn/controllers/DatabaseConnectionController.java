@@ -91,6 +91,8 @@ public class DatabaseConnectionController extends BaseController {
         this.sessionDbConnection.setConnection(userDbConnection);
         this.connectionStorageService.addConnection(userDbConnection);
 
+        connectionManager.initializeNewConnection();
+
         return redirect("/");
     }
 

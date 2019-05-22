@@ -35,26 +35,12 @@ public abstract class ConnectionManagerBase implements ConnectionManager {
     }
 
     @Override
-    public UserDbConnection connectWithORM(DbCredentials credentials, Collection<Class<?>> mappedEntities) {
-        UserDbConnection connection = this.createORMConnection(credentials, mappedEntities);
+    public void initializeNewConnection() {
         this.databaseInitializeService.initializeDatabase();
-        return connection;
     }
 
     @Override
-    public boolean testJdbcConnection(DbCredentials dbCredentials) {
-        try (Connection connection = this.createJdbcConnection(dbCredentials)) {
-            return true;
-        } catch (SQLException ignored) {
-            return false;
-        }
-    }
-
-    protected abstract Connection createJdbcConnection(DbCredentials credentials) throws SQLException;
-
-    protected abstract Properties getProviderSpecificProperties(DbCredentials credentials);
-
-    private UserDbConnection createORMConnection(DbCredentials credentials, Collection<Class<?>> mappedEntities) {
+    public UserDbConnection connectWithORM(DbCredentials credentials, Collection<Class<?>> mappedEntities) {
         final UserDbConnection userDbConnection = new UserDbConnection(credentials);
 
         final String persistenceUnitName = UUID.randomUUID().toString();
@@ -77,4 +63,17 @@ public abstract class ConnectionManagerBase implements ConnectionManager {
 
         return userDbConnection;
     }
+
+    @Override
+    public boolean testJdbcConnection(DbCredentials dbCredentials) {
+        try (Connection connection = this.createJdbcConnection(dbCredentials)) {
+            return true;
+        } catch (SQLException ignored) {
+            return false;
+        }
+    }
+
+    protected abstract Connection createJdbcConnection(DbCredentials credentials) throws SQLException;
+
+    protected abstract Properties getProviderSpecificProperties(DbCredentials credentials);
 }

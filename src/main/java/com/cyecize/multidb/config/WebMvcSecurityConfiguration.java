@@ -1,5 +1,6 @@
 package com.cyecize.multidb.config;
 
+import com.cyecize.multidb.areas.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -14,8 +15,11 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebMvcSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    private final UserService userService;
+
     @Autowired
-    public WebMvcSecurityConfiguration() {
+    public WebMvcSecurityConfiguration(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
@@ -44,7 +48,7 @@ public class WebMvcSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .key("theQuickBrownFoxJumpsOverEmLazyGods")
                 .rememberMeCookieName("rememberMe")
                 .tokenValiditySeconds(7200)
-                //.userDetailsService(this.userService)
+                .userDetailsService(this.userService)
                 .and()
                 .exceptionHandling()
                 .accessDeniedPage("/unauthorized")

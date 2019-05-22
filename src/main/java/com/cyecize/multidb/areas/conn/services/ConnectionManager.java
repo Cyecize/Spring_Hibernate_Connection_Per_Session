@@ -6,6 +6,9 @@ import com.cyecize.multidb.areas.conn.models.UserDbConnection;
 import java.util.Collection;
 
 public interface ConnectionManager {
+
+    void initializeNewConnection();
+
     boolean testJdbcConnection(DbCredentials dbCredentials);
 
     UserDbConnection connectWithORM(DbCredentials credentials, Collection<Class<?>> mappedEntities);
