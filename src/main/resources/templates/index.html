@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="layout/head.html :: head"> </th:block>
 <body>
-    Hello
-</body>
-</html>
+
+<th:block th:include="layout/navbar :: navbar"> </th:block>
+<div>
+    <div class="container">
+        <div class="m-auto">
+           <h1>Welcome To Car Dealer</h1>
+
+            <p>To login, click <a href="/login">here</a>.</p>
+            <p>To register, click <a href="/register">here</a>.</p>
+        </div>
+    </div>
+</div>

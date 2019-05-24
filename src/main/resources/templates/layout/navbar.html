@@ -1,0 +1,58 @@
+<header xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:fragment="navbar">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" th:href="@{/}">Car Dealer</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown" sec:authorize="isAnonymous()" > <!--  -->
+                    <a class="nav-link dropdown-toggle" href="#" id="authDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Authentication
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="authDropdown">
+                        <a class="dropdown-item" href="/login">Login</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/register">Register</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown" sec:authorize="isFullyAuthenticated()">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Cars
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                        <a class="dropdown-item" href="/cars/browse">Browse Cars</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown" sec:authorize="hasAuthority('ROLE_ADMIN')">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Admin
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown3">
+                        <a class="dropdown-item" href="/cars/create">Create Car</a>
+                    </div>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav  ml-auto"  sec:authorize="isFullyAuthenticated()" ><!---->
+                <li class="nav-item">
+                    <form th:action="@{/logout}" th:method="post">
+                        <th:block th:include="validation/csrf :: csrf"> </th:block>
+                        <button type="submit" class="btn border-0 px-0 btn-link nav-link text-light">
+                            Logout
+                        </button>
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link" >Hello, <span sec:authentication="principal.username" ></span></span><!---->
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>

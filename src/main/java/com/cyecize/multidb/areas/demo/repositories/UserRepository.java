@@ -18,10 +18,11 @@ public class UserRepository extends BaseRepository<User, Long> {
 
     public User findByUsernameOrEmail(String handle) {
         return super.queryBuilderSingle((query, userRoot) ->
-                query.where(new NotNullPredicateList(
-                        super.criteriaBuilder.equal(userRoot.get(USERNAME_FIELD_NAME), handle),
-                        super.criteriaBuilder.or(super.criteriaBuilder.equal(userRoot.get(EMAIL_FIELD_NAME), handle))
-                ).toArray())
+                query.where(super.criteriaBuilder.or(new NotNullPredicateList(
+                                super.criteriaBuilder.equal(userRoot.get(USERNAME_FIELD_NAME), handle),
+                                super.criteriaBuilder.equal(userRoot.get(EMAIL_FIELD_NAME), handle)
+                        ).toArray()
+                ))
         );
     }
 }

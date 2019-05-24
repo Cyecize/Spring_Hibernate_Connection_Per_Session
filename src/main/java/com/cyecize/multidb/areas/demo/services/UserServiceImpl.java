@@ -61,7 +61,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String handle) throws UsernameNotFoundException {
-        return this.findByEmailOrUsername(handle);
+        User user = this.findByEmailOrUsername(handle);
+        if (user == null) {
+            throw new UsernameNotFoundException("Username does not exist");
+        }
+
+        return user;
     }
 
     @Override
