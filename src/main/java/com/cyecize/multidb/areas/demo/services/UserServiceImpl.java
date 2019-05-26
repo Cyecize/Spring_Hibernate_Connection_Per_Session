@@ -37,6 +37,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(CreateUserBindingModel bindingModel) {
         User user = this.modelMapper.map(bindingModel, User.class);
+        user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));
+
         user.addRole(this.roleService.find(RoleType.ROLE_USER));
 
         this.repository.persist(user);
