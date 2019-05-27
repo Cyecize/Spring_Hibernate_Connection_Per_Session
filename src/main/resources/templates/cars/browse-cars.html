@@ -1,0 +1,46 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:include="layout/head.html :: head"> </th:block>
+<body>
+
+<th:block th:include="layout/navbar :: navbar"> </th:block>
+<div>
+    <div class="container">
+        <h3>Browse cars</h3>
+        <div class="m-auto">
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Make</th>
+                    <th scope="col">Model</th>
+                    <th scope="col">Travelled Distance</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <!--/*@thymesVar id="cars" type="com.cyecize.multidb.areas.demo.entities.Car[]"*/-->
+                <th:block th:each="car : ${cars}">
+                    <tr>
+                        <th scope="row" th:text="${car.id}"></th>
+                        <td th:text="${car.make}"></td>
+                        <td th:text="${car.model}"></td>
+                        <td th:text="${car.travelledDistance}"></td>
+                        <td th:text="${car.price}"></td>
+                        <td>
+                            <th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
+                                <a th:href="@{/cars/edit/{carId}(carId=${car.id})}" class="btn btn-dark">Edit</a>
+                            </th:block>
+                            <a th:href="@{/orders/order/{carId}(carId=${car.id})}" class="btn btn-dark">Order</a>
+                        </td>
+                    </tr>
+                </th:block>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

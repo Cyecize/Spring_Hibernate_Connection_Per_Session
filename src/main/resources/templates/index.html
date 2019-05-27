@@ -1,4 +1,4 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:include="layout/head.html :: head"> </th:block>
 <body>
 
@@ -8,8 +8,16 @@
         <div class="m-auto">
            <h1>Welcome To Car Dealer</h1>
 
-            <p>To login, click <a href="/login">here</a>.</p>
-            <p>To register, click <a href="/register">here</a>.</p>
+            <div>
+                <th:block sec:authorize="isAnonymous()">
+                    <p>To login, click <a href="/login">here</a>.</p>
+                    <p>To register, click <a href="/register">here</a>.</p>
+                </th:block>
+
+                <th:block sec:authorize="isFullyAuthenticated()">
+                    <p>Hello, <span sec:authentication="principal.username"></span></p>
+                </th:block>
+            </div>
         </div>
     </div>
 </div>
