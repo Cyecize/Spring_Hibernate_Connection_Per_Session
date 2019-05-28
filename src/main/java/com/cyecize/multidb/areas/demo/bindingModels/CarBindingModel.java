@@ -3,7 +3,7 @@ package com.cyecize.multidb.areas.demo.bindingModels;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-public class CreateCarBindingModel {
+public class CarBindingModel {
 
     @NotNull
     @NotEmpty
@@ -19,7 +19,7 @@ public class CreateCarBindingModel {
     @NotNull
     private Double price;
 
-    public CreateCarBindingModel() {
+    public CarBindingModel() {
 
     }
 

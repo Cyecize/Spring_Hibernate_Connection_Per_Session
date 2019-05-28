@@ -5,42 +5,42 @@
 <th:block th:include="layout/navbar :: navbar"> </th:block>
 <div>
     <div class="container">
-        <h3>Create Car</h3>
+        <h3>Edit Car</h3>
 
-        <!--/*@thymesVar id="model" type="com.cyecize.multidb.areas.demo.bindingModels.CarBindingModel"*/-->
+        <!--/*@thymesVar id="car" type="com.cyecize.multidb.areas.demo.entities.Car"*/-->
         <div class="m-auto">
             <form method="post" id="formDbConnection">
                 <div class="form-group">
                     <label for="make">Make</label>
 
-                    <input th:value="${model.make}" type="text" id="make" name="make" class="form-control" required>
+                    <input th:value="${car.make}" type="text" id="make" name="make" class="form-control" required>
                     <th:block th:with="fieldName='make'" th:include="validation/field-errors.html :: fieldError"> </th:block>
                 </div>
 
                 <div class="form-group">
                     <label for="model">Model</label>
 
-                    <input th:value="${model.model}" type="text" id="model" name="model" class="form-control" required>
+                    <input th:value="${car.model}" type="text" id="model" name="model" class="form-control" required>
                     <th:block th:with="fieldName='model'" th:include="validation/field-errors.html :: fieldError"> </th:block>
                 </div>
 
                 <div class="form-group">
                     <label for="travelledDistance">Travelled Distance</label>
-                    <input th:value="${model.travelledDistance}" type="number" id="travelledDistance" step="1" name="travelledDistance"
+                    <input th:value="${car.travelledDistance}" type="number" id="travelledDistance" step="1" name="travelledDistance"
                            class="form-control " required>
                     <th:block th:with="fieldName='travelledDistance'" th:include="validation/field-errors.html :: fieldError"> </th:block>
                 </div>
 
                 <div class="form-group">
                     <label for="price">Price</label>
-                    <input th:value="${model.price}" type="number" id="price" step="any" name="price"
+                    <input th:value="${car.price}" type="number" id="price" step="any" name="price"
                            class="form-control " required>
                     <th:block th:with="fieldName='price'" th:include="validation/field-errors.html :: fieldError"> </th:block>
                 </div>
 
                 <div class="form-group text-right">
                     <th:block th:include="validation/csrf.html :: csrf"> </th:block>
-                    <button class="btn btn-info" id="btnConnect">Create</button>
+                    <button class="btn btn-info" id="btnConnect">Save</button>
                 </div>
             </form>
         </div>
