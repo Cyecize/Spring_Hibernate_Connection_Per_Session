@@ -49,7 +49,7 @@ public class OrdersController extends BaseController {
     public ModelAndView declineOrderAction(@PathVariable("orderId") Order order, Principal principal) {
         User user = this.userService.findByEmailOrUsername(principal.getName());
 
-        if (order == null || !order.getCustomer().getId().equals(user.getId())) return redirect("orders/browse");
+        if (order == null || !order.getCustomer().getId().equals(user.getId())) return redirect("/orders/browse");
 
         this.orderService.removeOrder(order);
 
@@ -58,7 +58,7 @@ public class OrdersController extends BaseController {
 
     @GetMapping("/invalidate/{orderId}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ModelAndView invalidateOrderAction(@PathVariable("orderId") Order order, Principal principal) {
+    public ModelAndView invalidateOrderAction(@PathVariable("orderId") Order order) {
         this.orderService.removeOrder(order);
         return redirect("/orders/all");
     }
