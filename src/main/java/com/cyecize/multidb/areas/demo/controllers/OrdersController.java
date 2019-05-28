@@ -1,6 +1,8 @@
 package com.cyecize.multidb.areas.demo.controllers;
 
 import com.cyecize.multidb.areas.demo.entities.Car;
+import com.cyecize.multidb.areas.demo.entities.Order;
+import com.cyecize.multidb.areas.demo.entities.User;
 import com.cyecize.multidb.areas.demo.services.OrderService;
 import com.cyecize.multidb.areas.demo.services.UserService;
 import com.cyecize.multidb.controllers.BaseController;
@@ -35,6 +37,35 @@ public class OrdersController extends BaseController {
 
         this.orderService.placeOrder(car, this.userService.findByEmailOrUsername(principal.getName()));
 
-        return redirect("/cars/browse?infoMsg=Order Was Placed!");
+        return redirect("/orders/browse?infoMsg=Order Was Placed!");
+    }
+
+    @GetMapping("/browse")
+    public ModelAndView browseOrdersAction(Principal principal) {
+        return view("orders/browse-orders", "orders", this.orderService.findByUser(this.userService.findByEmailOrUsername(principal.getName())));
+    }
+
+    @GetMapping("/decline/{orderId}")
+    public ModelAndView declineOrderAction(@PathVariable("orderId") Order order, Principal principal) {
+        User user = this.userService.findByEmailOrUsername(principal.getName());
+
+        if (order == null || !order.getCustomer().getId().equals(user.getId())) return redirect("orders/browse");
+
+        this.orderService.removeOrder(order);
+
+        return redirect("/orders/browse");
+    }
+
+    @GetMapping("/invalidate/{orderId}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ModelAndView invalidateOrderAction(@PathVariable("orderId") Order order, Principal principal) {
+        this.orderService.removeOrder(order);
+        return redirect("/orders/all");
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ModelAndView allRolesAction() {
+        return view("orders/browse-orders", "orders", this.orderService.findAll());
     }
 }

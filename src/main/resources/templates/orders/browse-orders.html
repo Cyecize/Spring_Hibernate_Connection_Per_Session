@@ -1,0 +1,46 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:include="layout/head.html :: head"> </th:block>
+<body>
+
+<th:block th:include="layout/navbar :: navbar"> </th:block>
+<div>
+    <div class="container">
+        <h3>Browse orders</h3>
+        <div class="m-auto">
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Customer Name</th>
+                    <th scope="col">Order Date</th>
+                    <th scope="col">Car</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <!--/*@thymesVar id="orders" type="com.cyecize.multidb.areas.demo.entities.Order[]"*/-->
+                <th:block th:each="order : ${orders}">
+                    <tr>
+                        <th scope="row" th:text="${order.id}"></th>
+                        <td th:text="${order.customer.username}"></td>
+                        <td th:text="${#temporals.formatISO(order.purchaseDate)}"></td>
+                        <td th:inline="text">[[${order.orderedCar.make}]] - [[${order.orderedCar.model}]]</td>
+                        <td class="text-right">
+                            <th:block th:if="${#authentication.principal.username == order.customer.username}">
+                                <a th:href="@{/orders/decline/{orderId}(orderId=${order.id})}" class="btn btn-dark">Remove Order</a>
+                            </th:block>
+                            <th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
+                                <a th:href="@{/orders/invalidate/{orderId}(orderId=${order.id})}" class="btn btn-dark">Invalidate Order</a>
+                            </th:block>
+                        </td>
+                    </tr>
+                </th:block>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
