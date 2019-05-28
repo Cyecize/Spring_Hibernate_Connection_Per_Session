@@ -1,6 +1,8 @@
 package com.cyecize.multidb.areas.conn.services;
 
 import com.cyecize.multidb.areas.conn.models.UserDbConnection;
+import org.hibernate.Session;
+import org.hibernate.internal.SessionImpl;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
@@ -33,9 +35,14 @@ public class SessionDbServiceImpl implements SessionDbService {
 
     @Override
     public boolean hasOpenConnection() {
-        return this.dbConnection != null &&
-                this.dbConnection.getOrmConnection() != null &&
-                this.dbConnection.getOrmConnection().isOpen();
+        try {
+            return this.dbConnection != null &&
+                    this.dbConnection.getOrmConnection() != null &&
+                    this.dbConnection.getOrmConnection().isOpen() &&
+                    ((SessionImpl) this.dbConnection.getEntityManager().unwrap(Session.class)).connection().isValid(2);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override

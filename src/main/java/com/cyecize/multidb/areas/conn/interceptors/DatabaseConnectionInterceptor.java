@@ -5,6 +5,7 @@ import com.cyecize.multidb.areas.conn.constants.DbConnectionConstants;
 import com.cyecize.multidb.areas.conn.models.UserDbConnection;
 import com.cyecize.multidb.areas.conn.services.SessionDbService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -32,7 +33,12 @@ public class DatabaseConnectionInterceptor implements HandlerInterceptor {
                 HandlerMethod handlerMethod = (HandlerMethod) handler;
 
                 if (!this.sessionDbService.hasOpenConnection()) {
-                    response.sendRedirect(request.getContextPath() + DbConnectionConstants.DB_CONNECT_ROUTE);
+                    this.sessionDbService.setConnection(null);
+
+                    //Logout if user is present.
+                    new SecurityContextLogoutHandler().logout(request, null, null);
+
+                    response.sendRedirect(DbConnectionConstants.DB_CONNECT_ROUTE);
                     return false;
                 }
 
